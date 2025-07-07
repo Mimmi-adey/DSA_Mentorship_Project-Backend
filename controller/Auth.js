@@ -50,35 +50,50 @@ const register = async (req, res) =>{
 }
 
 // User Login
-const login = async (req, res) =>{
-    try {
-        const {email, password} = req.body;
-        if(!email || !password){
-            return res.status(400).json({message:"Email and password are required"});
-        }
-        const user = await AuthModel.findOne({email});
-        if(!user){
-            return res.status(400).json({message:"Invalid Credentials"});
-        }
-        const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-            return res.status(400).json({message:"Invalid Credentials"});
-        }
-        const token = jwt.sign({id: user.id}, process.env.JWT_SECRETKEY, {
-            expiresIn:"14d"
-        })
-        res.cookie("token", token, {
-            httpOnly:true,
-            secure:true,
-            sameSite:"strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-        })
-        return res.status(200).json({message:"Login Successful 👍", user: {id: user._id, name: user.name, email: user.email, role: user.role}});
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({message:"Server error"});
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
     }
-}
+
+    const user = await AuthModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid Credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Credentials" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRETKEY, {
+      expiresIn: "7d"
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.status(200).json({
+      message: "Login Successful 👍",
+      token,
+      role: user.role,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 // User Logout
 const logout = async (req, res) =>{
