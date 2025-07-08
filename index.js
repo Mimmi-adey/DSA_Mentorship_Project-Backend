@@ -30,6 +30,9 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Backend" });
 });
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ message: "✅ API is healthy!" });
+});
 
 // DB and server startup
 connectDb();
