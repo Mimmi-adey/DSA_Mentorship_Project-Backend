@@ -5,7 +5,8 @@ import bodyParser from "body-parser";
 import connectDb from "./config/Mongodb.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
 import ProfileRoutes from "./routes/ProfileRoutes.js";
-import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser"; 
+import mentorRoutes from "./routes/mentorRoutes.js";
 dotenv.config();
 
 const port = process.env.PORT;
@@ -23,6 +24,7 @@ app.use(cors ({
 }))
 app.use("/api/auth", AuthRoutes);
 app.use("/api/profile", ProfileRoutes);
+app.use("/api/", mentorRoutes)
 // Connecting to Database
 
 // TEST Route
