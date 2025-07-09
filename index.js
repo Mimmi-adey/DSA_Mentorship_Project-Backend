@@ -14,12 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowOrigin =["https://app.netlify.com/projects/mariamadeyemo-mentormatch-dsaproject/","http://localhost:5173/"]
+const allowOrigin =["https://mariamadeyemo-mentormatch-dsaproject.netlify.app","http://localhost:5173"]
 app.use(cors ({
   origin:allowOrigin,
   credentials:true,
   methods:["GET","PUT","DELETE","POST"],
-  allowedHeaders:["content-type", "Authorization"]
+  allowedHeaders:["Content-Type", "Authorization"]
 }))
 app.use("/api/auth", AuthRoutes);
 app.use("/api/profile", ProfileRoutes);
