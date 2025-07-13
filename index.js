@@ -7,6 +7,9 @@ import AuthRoutes from "./routes/AuthRoutes.js";
 import ProfileRoutes from "./routes/ProfileRoutes.js";
 import cookieParser from "cookie-parser"; 
 import mentorRoutes from "./routes/mentorRoutes.js";
+import { authMiddleware } from './middleware/authMiddleware.js';
+import { adminMiddleware } from './middleware/adminMiddleware.js';
+import adminRoutes from './routes/adminRoutes.js';
 dotenv.config();
 
 const port = process.env.PORT;
@@ -24,7 +27,8 @@ app.use(cors ({
 }))
 app.use("/api/auth", AuthRoutes);
 app.use("/api/profile", ProfileRoutes);
-app.use("/api/", mentorRoutes)
+app.use("/api/", mentorRoutes);
+app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 // Connecting to Database
 
 // TEST Route

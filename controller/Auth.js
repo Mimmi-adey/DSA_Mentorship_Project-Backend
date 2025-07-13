@@ -55,6 +55,8 @@ const login = async (req, res) =>{
         const {email, password} = req.body;
         if(!email || !password){
             return res.status(400).json({message:"Email and password are required"});
+            console.log("Received in backend:", req.body);
+
         }
         const user = await AuthModel.findOne({email});
         if(!user){
@@ -65,7 +67,7 @@ const login = async (req, res) =>{
             return res.status(400).json({message:"Invalid Credentials"});
         }
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRETKEY, {
-            expiresIn:"14d"
+            expiresIn:"7d"
         })
         res.cookie("token", token, {
             httpOnly:true,
@@ -73,7 +75,16 @@ const login = async (req, res) =>{
             sameSite:"strict",
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         })
-        return res.status(200).json({message:"Login Successful 👍", user: {id: user._id, name: user.name, email: user.email, role: user.role}});
+        return res.status(200).json({
+        message: "Login Successful 👍",
+        token,
+        user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+        }
+        });
     } catch (error) {
         console.log(error)
         return res.status(500).json({message:"Server error"});
