@@ -28,7 +28,7 @@ app.use(cors ({
 app.use("/api/auth", AuthRoutes);
 app.use("/api/profile", ProfileRoutes);
 app.use("/api/", mentorRoutes);
-app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
+app.use('/api/admin', adminRoutes);
 // Connecting to Database
 
 // TEST Route
