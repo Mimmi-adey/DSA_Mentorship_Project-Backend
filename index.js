@@ -10,6 +10,8 @@ import mentorRoutes from "./routes/mentorRoutes.js";
 import { authMiddleware } from './middleware/authMiddleware.js';
 import { adminMiddleware } from './middleware/adminMiddleware.js';
 import adminRoutes from './routes/adminRoutes.js';
+import sessionRoutes from './routes/sessionRoutes.js';
+
 dotenv.config();
 
 const port = process.env.PORT;
@@ -22,13 +24,19 @@ const allowOrigin =["https://mariamadeyemo-mentormatch-dsaproject.netlify.app","
 app.use(cors ({
   origin:allowOrigin,
   credentials:true,
-  methods:["GET","PUT","DELETE","POST"],
-  allowedHeaders:["Content-Type", "Authorization"]
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
 }))
+app.options("*", cors({
+  origin: ["https://mariamadeyemo-mentormatch-dsaproject.netlify.app","http://localhost:5173"],
+  credentials: true
+}));
+
 app.use("/api/auth", AuthRoutes);
 app.use("/api/profile", ProfileRoutes);
-app.use("/api/", mentorRoutes);
-app.use('/api/admin', adminRoutes);
+app.use("/api/admin", authMiddleware, adminMiddleware, adminRoutes);
+app.use("/api/mentor", authMiddleware, mentorRoutes);
+app.use("/api/sessions", sessionRoutes);
 // Connecting to Database
 
 // TEST Route
