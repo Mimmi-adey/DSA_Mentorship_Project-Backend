@@ -7,9 +7,9 @@ import bcrypt from "bcryptjs";
 const register = async (req, res) =>{
     const salt = 8;
     try {
-        const {name, email, password, role} = req.body;
+        const {email, password, role} = req.body;
 
-        if (!name|| !email|| !password|| !role){
+        if (!email|| !password|| !role){
             return res.status(400).json({message: "All fields are required!!!"});
         }
         // If User Already Exist
@@ -41,7 +41,7 @@ const register = async (req, res) =>{
             sameSite:"Strict",
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         })
-        return res.status(201).json({message:"User registered successfully", user:{id: user._id, name, email, role}});
+        return res.status(201).json({message:"User registered successfully", user:{id: user._id, email, role}});
     } catch (error) {
         console.log(error)
         return res.status(500).json({message:"Server error"});
