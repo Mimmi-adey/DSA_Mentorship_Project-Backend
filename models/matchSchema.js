@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const matchSchema = new mongoose.Schema({
   mentee: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Auth',
+    ref: 'users', // match the AuthModel export
     required: true,
   },
   mentor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Auth',
+    ref: 'users',
     default: null, // can be null until assigned
   },
   topic: {
@@ -20,11 +20,7 @@ const matchSchema = new mongoose.Schema({
     enum: ['pending', 'assigned', 'rejected'],
     default: 'pending',
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  }
-});
+}, { timestamps: true });
 
-const MatchModel = mongoose.model('Match', matchSchema);
+const MatchModel = mongoose.models.Match || mongoose.model('Match', matchSchema);
 export default MatchModel;

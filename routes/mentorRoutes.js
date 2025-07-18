@@ -11,28 +11,39 @@ import {
   submitFeedback,
 } from "../controller/mentorcontroller.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
-import MentorModel from "../models/matchSchema.js";
 import SessionModel from "../models/sessionSchema.js";
 import MatchModel from "../models/matchSchema.js";
+import AuthModel from "../models/authSchema.js"; // For mentor profile
 
 const mentorRoutes = express.Router();
 
+// Create mentor profile (if needed)
 mentorRoutes.post("/addMentor", addMentor);
-mentorRoutes.get("/get-mentor", getMentor);
+
+// Get own mentor details
+mentorRoutes.get("/get-mentor", authMiddleware, getMentor);
+
+// Mentor dashboard overview
 mentorRoutes.get("/dashboard", authMiddleware, getMentorDashboard);
+
+// Weekly availability
 mentorRoutes.post("/availability", authMiddleware, setAvailability);
 mentorRoutes.get("/availability", authMiddleware, getAvailability);
+
+// Mentee requests
 mentorRoutes.get("/requests", authMiddleware, getMenteeRequests);
 mentorRoutes.put("/requests/:id", authMiddleware, respondToRequest);
+
+// Sessions & feedback
 mentorRoutes.get("/sessions", authMiddleware, getMentorSessions);
 mentorRoutes.post("/sessions/:id/feedback", authMiddleware, submitFeedback);
 
-
+// Extra: Inline Mentor Dashboard (Raw)
 mentorRoutes.get("/mentordashboard", authMiddleware, async (req, res) => {
   try {
     const mentorId = req.user.id;
 
-    const mentor = await MentorModel.findById(mentorId).select("fullName email");
+    const mentor = await AuthModel.findById(mentorId).select("fullName email");
 
     const upcomingSessions = await SessionModel.find({ mentor: mentorId })
       .populate("mentee", "fullName email")

@@ -16,6 +16,7 @@ dotenv.config();
 
 const port = process.env.PORT;
 const app = express();
+  app.set('trust proxy', 1);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -24,19 +25,15 @@ const allowOrigin =["https://mariamadeyemo-mentormatch-dsaproject.netlify.app","
 app.use(cors ({
   origin:allowOrigin,
   credentials:true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  methods:["GET","POST", "PUT", "DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "withCredentials"],
 }))
-app.options("*", cors({
-  origin: ["https://mariamadeyemo-mentormatch-dsaproject.netlify.app","http://localhost:5173"],
-  credentials: true
-}));
-
 app.use("/api/auth", AuthRoutes);
 app.use("/api/profile", ProfileRoutes);
-app.use("/api/admin", authMiddleware, adminMiddleware, adminRoutes);
-app.use("/api/mentor", authMiddleware, mentorRoutes);
-app.use("/api/sessions", sessionRoutes);
+app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
+app.use('/api/mentor', authMiddleware, mentorRoutes);
+app.use('/api/sessions', sessionRoutes);
+app.use('/api/mentor', mentorRoutes);
 // Connecting to Database
 
 // TEST Route

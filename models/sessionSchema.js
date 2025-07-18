@@ -23,11 +23,16 @@ const sessionSchema = new mongoose.Schema({
     mentee: { type: String },
     mentor: { type: String },
   },
+  status: {
+    type: String,
+    enum: ['upcoming', 'completed', 'cancelled'],
+    default: 'upcoming',
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const SessionModel = mongoose.model('Session', sessionSchema);
+const SessionModel = mongoose.models.Session || mongoose.model('Session', sessionSchema);
 export default SessionModel;

@@ -1,12 +1,23 @@
-import {get} from "mongoose";
-import {register, login, logout, getUserData} from "../controller/Auth.js";
 import express from "express";
-const AuthRoutes = express.Router()
+import {
+  register,
+  login,
+  logout,
+  getUserData
+} from "../controller/Auth.js";
+
+const AuthRoutes = express.Router();
 
 // User Registration Route
-AuthRoutes.post("/register", register)
-AuthRoutes.post("/login", login)
-AuthRoutes.post("/logout", logout)
-AuthRoutes.get("/getUserData/:id", getUserData)
+AuthRoutes.post("/register", register);
+
+// User Login Route
+AuthRoutes.post("/login", login);
+
+// User Logout Route
+AuthRoutes.post("/logout", logout);
+
+// Get User Data by ID
+AuthRoutes.get("/getUserData/:id", getUserData);
 
 export default AuthRoutes;

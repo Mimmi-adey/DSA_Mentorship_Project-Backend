@@ -64,7 +64,7 @@ const getMentorDashboard = async (req, res) => {
       status: 'pending',
     }).populate('mentee', 'fullName email');
 
-    const mentor = await AuthModel.findById(mentorId).select('fullName email');
+    const mentor = await MentorModel.findById(mentorId).select('fullName email');
 
     res.status(200).json({
       mentor,

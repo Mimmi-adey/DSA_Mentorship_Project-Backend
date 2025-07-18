@@ -54,10 +54,10 @@ const login = async (req, res) =>{
     try {
         const {email, password} = req.body;
         if(!email || !password){
-            return res.status(400).json({message:"Email and password are required"});
-            console.log("Received in backend:", req.body);
-
+             console.log("Received in backend:", req.body);
+        return res.status(400).json({message:"Email and password are required"});
         }
+
         const user = await AuthModel.findOne({email});
         if(!user){
             return res.status(400).json({message:"Invalid Credentials"});
@@ -119,7 +119,7 @@ const getUserData =async(req, res) =>{
             return res.status(404).json({message:"User not found"});
 
     }
-        return res.status(200).json({UserData});
+        return res.status(200).json(UserData);
     } catch (error) {
         console.log(error)
         return res.status(500).json({message:"Server error"});

@@ -4,7 +4,6 @@ import AuthModel from "../models/authSchema.js";
 const getUserData =async(req, res) =>{
 
     try {
-
         const {id} = req.params;
 
         const UserData = await AuthModel.findById(id).select("-password");

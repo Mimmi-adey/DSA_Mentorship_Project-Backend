@@ -1,20 +1,22 @@
 import mongoose from "mongoose"; 
 
 const authSchema = new mongoose.Schema({
-    name:{type:String, require:true},
-    email:{type:String, require:true, unique:true},
-    password:{type:String, require:true, unique:true},
-    role:{type:String, require:true,
-        enum: ["admin", "mentor", "mentee"],
-        default:"mentee"
-    },
-    bio:{type:String, default:""},
-    skills:{type:String},
-    goal:{type:String},
-},
-    {timestamps:true},
-    {minimize: false},
-)
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ["admin", "mentor", "mentee"],
+    default: "mentee",
+    required: true,
+  },
+  bio: { type: String, default: "" },
+  skills: { type: [String], default: [] },
+  goal: { type: String, default: "" },
+}, {
+  timestamps: true,
+});
 
-const AuthModel = mongoose.model.users || mongoose.model("users", authSchema);
+const AuthModel = mongoose.models.users || mongoose.model("users", authSchema);
+
 export default AuthModel;
